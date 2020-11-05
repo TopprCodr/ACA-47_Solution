@@ -11,19 +11,19 @@
    }
    
    function setup(){
-     createCanvas(500,500)
-    space = createSprite(0, 0 ,400, 400);
+     createCanvas(displayWidth,displayHeight)
+    space = createSprite(width, height);
     space.addImage(spaceImage);  
-    space.scale=3
+    space.scale=5
     space.y = space.height/2;
     
-    player = createSprite(200, 460);
+    player = createSprite(width/2, height-20);
     player.addImage(spaceshipImage);
-    player.scale= 0.5;
+    //player.scale= 0.5;
 
-    restart=createSprite(250,250);
+    restart=createSprite(width/2,height/2);
     restart.addImage(restartImage); 
-    restart.scale=0.5;
+    //restart.scale=0.5;
     restart.visible=false;
 
     EnemyGroup = new Group();
@@ -60,9 +60,9 @@
        
    }
    if(gameState==="end"){
-     
      space.velocityY=0;
     EnemyGroup.setVelocityYEach(0);
+    EnemyGroup.setLifetimeEach(-1);
     restart.visible=true;
    }
 
@@ -76,7 +76,7 @@
  
    for (var i = 0; i < EnemyGroup.length; i++) {
      var temp1=EnemyGroup.get(i);
-     if(temp1.y>500){
+     if(temp1.y>height){
      temp1.destroy();
      score = score-1;
    }
@@ -97,17 +97,18 @@
    if(World.frameCount%40===0){
      var enemy = createSprite(300,0);
      enemy.addImage(enemyImage);
-     enemy.x = random(20,500);
+     enemy.x = random(20,width-20);
      enemy.velocityY = 5;
-     enemy.scale = 0.5;
+     enemy.scale = 0.9;
      enemy.lifetime = 300;
      EnemyGroup.add(enemy);
    }
  }
  
  function generateBullets() {
-   var bullet = createSprite(300,380,5,10);
+   var bullet = createSprite(300,300,5,10);
    bullet.x = player.x;
+   bullet.y = player.y;
    bullet.shapeColor = "red"; 
    bullet.velocityY = -10;
    bullet.depth = player.depth-1;
