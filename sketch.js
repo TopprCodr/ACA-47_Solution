@@ -1,4 +1,5 @@
    
+   
    var gameState = "play";
    var score =0;
 
@@ -6,8 +7,7 @@
     spaceImage= loadImage("images/bgspace.jpg");
     enemyImage= loadImage("images/enemy.png");
     spaceshipImage= loadImage("images/spaceShip.png");
-    restartImage=loadImage("images/restart.png");
-    shoot=loadSound("shooting.mp3");
+    bulletImage=loadImage("images/firebullet.png");
    }
    
    function setup(){
@@ -17,19 +17,15 @@
     space.scale=5
     space.y = space.height/2;
     
-    player = createSprite(width/2, height-200);
+    console.log(3*"bob");
+    player = createSprite(width/2, height-100);
     player.addImage(spaceshipImage);
-    
-
-    restart=createSprite(width/2,height/2);
-    restart.addImage(restartImage); 
-    //restart.scale=0.5;
-    restart.visible=false;
+    player.scale= 0.5;
 
     EnemyGroup = new Group();
     BulletGroup = new Group();
     textSize(25);
-    fill("yellow");
+    fill("yellow")
    }
 
 
@@ -41,31 +37,20 @@
    if(gameState === "play"){
   
     if(keyWentDown("space"))  {
-      shoot.play();
       generateBullets();  
    }
 
      space.velocityY= 5;
      player.x = World.mouseX;
    
-     if (space.y > 500) {       
+     if (space.y > height) {       
        space.y = space.height/2;
      }
   
      generateEnemy();
-
-     if(player.isTouching(EnemyGroup)){
-       gameState ="end";
-     }
        
    }
-   if(gameState==="end"){
-     space.velocityY=0;
-    EnemyGroup.setVelocityYEach(0);
-    EnemyGroup.setLifetimeEach(-1);
-    restart.visible=true;
-   }
-
+   
    for (var i = 0; i < EnemyGroup.length; i++) {
    var temp=EnemyGroup.get(i);
    if(temp.isTouching(BulletGroup)){
@@ -76,17 +61,11 @@
  
    for (var i = 0; i < EnemyGroup.length; i++) {
      var temp1=EnemyGroup.get(i);
-     if(temp1.y>height){
+     if(temp1.y>height+50){
      temp1.destroy();
      score = score-1;
    }
  }  
- if(mousePressedOver(restart)){
-   gameState ="play";
-   EnemyGroup.destroyEach();
-   restart.visible=false;
-   score =0;
- }
    
    drawSprites();
     
@@ -97,16 +76,18 @@
    if(World.frameCount%40===0){
      var enemy = createSprite(300,0);
      enemy.addImage(enemyImage);
-     enemy.x = random(20,width-20);
+    enemy.x = random(20,width-20);
      enemy.velocityY = 5;
-     enemy.scale = 0.9;
+     enemy.scale = 0.5;
      enemy.lifetime = 300;
      EnemyGroup.add(enemy);
    }
  }
  
  function generateBullets() {
-   var bullet = createSprite(300,300,5,10);
+   var bullet = createSprite(300,380,5,10);
+   bullet.addImage(bulletImage);
+   bullet.scale=0.3;
    bullet.x = player.x;
    bullet.y = player.y;
    bullet.shapeColor = "red"; 
